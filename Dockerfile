@@ -1,37 +1,14 @@
-# Stage 1: Build stage
-FROM gradle:jdk11 AS build
-WORKDIR /app
+FROM openjdk:17-jre-slim
 
-# Copy the build.gradle.kts file into the container
-COPY . /app/
-
-# Execute the Gradle build script to get the new version
-RUN  gradle build --no-daemon
-
-# Package it into an artifact
-RUN gradle shadowJar
-
-# Stage 2: Production stage
-FROM adoptopenjdk/openjdk11:jre
-WORKDIR /app
-RUN useradd gradle
-# Copy the artifact from the build stage
-COPY --from=build /app/gradle-hello-world/build/libs/gradle-hello-world-all.jar /app/gradle-hello-world-all.jar
-
-# Tag the Docker image as the Jar version automatically
-ARG VERSION
-LABEL version=$VERSION
-
-# Ensure the Docker image doesn't run with root
-USER 1000:1000
-
-# Push the Docker image to Docker Hub
-# Assuming you have already logged in and set up Docker Hub credentials
-ARG omersh12
-ARG omer12shafir
-RUN echo omer12shafir | docker login --username omersh12 --password-stdin
-RUN docker push omersh12/gradle-hello-world:$VERSION
+# Create a non-root user and set permissions
+RUN useradd -m gradle
 USER gradle
-# Download and run the Docker image
-# Use `docker run` command with the appropriate options
-# Example: docker run -p 8080:8080 your-dockerhub-username/your-application:$VERSION
+
+# Create a directory for the application
+WORKDIR /app
+
+# Copy the jar file into the container
+COPY build/libs/*.jar /app/*
+
+# Run the application
+ENTRYPOINT ["java", "-jar", "/app/your-artifact.jar"]

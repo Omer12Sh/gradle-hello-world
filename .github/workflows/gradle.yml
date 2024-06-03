@@ -28,24 +28,24 @@ jobs:
         distribution: 'temurin'
 
     - name: Get current version
-        id: get_version
-        run: echo "::set-output name=version::$(grep -oP '(?<=version = ")[^"]*' build.gradle.kts)"
+      id: get_version
+      run: echo "::set-output name=version::$(grep -oP '(?<=version = ")[^"]*' build.gradle.kts)"
 
-      - name: Increment version
-        id: increment_version
-        run: echo "::set-output name=version::$(echo ${{ steps.get_version.outputs.version }} | awk -F '[.]' '{$NF+=1; OFS="."; print $0}')"
+    - name: Increment version
+      id: increment_version
+      run: echo "::set-output name=version::$(echo ${{ steps.get_version.outputs.version }} | awk -F '[.]' '{$NF+=1; OFS="."; print $0}')"
 
-      - name: Update version in build.gradle
-        run: |
-          sed -i "s/version = .*/version = \"${{ steps.increment_version.outputs.version }}\"/" build.gradle.kts
+    - name: Update version in build.gradle
+      run: |
+        sed -i "s/version = .*/version = \"${{ steps.increment_version.outputs.version }}\"/" build.gradle.kts
 
-      - name: Commit version change
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add build.gradle.kts
-          git commit -m "Increment version to ${{ steps.increment_version.outputs.version }}"
-          git push
+    - name: Commit version change
+      run: |
+        git config --global user.email "actions@github.com"
+        git config --global user.name "GitHub Actions"
+        git add build.gradle.kts
+        git commit -m "Increment version to ${{ steps.increment_version.outputs.version }}"
+        git push
 
     # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
