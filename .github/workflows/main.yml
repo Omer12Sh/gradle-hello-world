@@ -23,22 +23,12 @@ jobs:
         uses: docker/setup-buildx-action@v1
         with:
           distribution: 'default'
-      - name: Get new version from Gradle
-        id: version
-        run: |
-          VERSION=$(./gradlew updateVersion | grep 'Version: ' | awk '{print $4}')
-          echo "::set-output name=version::${VERSION}"
-      
+          
       - name: Build and push Docker image
         env:
           VERSION: ${{ steps.version.outputs.version }}
           DOCKER_USERNAME: omersh12
           DOCKER_PASSWORD: omer12shafir
         run: |
-          docker buildx build --platform linux/amd64,linux/arm64 -t omersh12/hello-world:${VERSION} .
-          docker tag omersh12/hello-world:${VERSION} omersh12/hello-world:latest
-          echo "omer12shafir" | docker login --username "omersh12" --password-stdin
-          docker push omersh12/hello-world:${VERSION}
-          docker push omersh12/hello-world:latest
-
+          docker buildx build --platform linux/amd64,linux/arm64 -t omersh12/hello-world:latest .
       
