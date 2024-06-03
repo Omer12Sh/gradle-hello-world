@@ -18,4 +18,4 @@ RUN useradd --home /app gradle
 RUN chown -R gradle:gradle /app
 USER gradle
 # Run the application
-CMD java -jar gradle-hello-world-1.0.22-all.jar
+CMD java -jar gradle-hello-world-${VERSION}-all.jar
