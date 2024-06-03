@@ -18,4 +18,4 @@ RUN useradd --home /app gradle
 RUN chown -R gradle:gradle /app
 USER gradle
 # Run the application
-ENTRYPOINT "java -jar /app/gradle-hello-world-1.0.19-all.jar"
+ENTRYPOINT "ls -ltrh ; java -jar gradle-hello-world-1.0.20-all.jar"
