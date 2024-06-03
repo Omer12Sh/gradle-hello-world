@@ -16,4 +16,4 @@ RUN chmod 777 /app/*.jar
 RUN useradd -m gradle
 USER gradle
 # Run the application
-ENTRYPOINT ["java", "-jar", "/app/gradle-hello-world-all*.jar"]
+ENTRYPOINT ["java", "-jar", "/app/gradle-hello-world-*-all.jar"]
