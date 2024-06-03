@@ -54,8 +54,10 @@ jobs:
       run: ./gradlew build
 
     - name: Build and Push image
+      env:
+        PASSWORD: ${{ secrets.DOCKER_HUB_PASS }}
       run: |
         docker build --build-arg VERSION=${{ steps.increment_version.outputs.version }} -t omersh12/gradle-hello-world:${{ steps.increment_version.outputs.version }} .
-        echo "omer12shafir" | docker login --username "omersh12" --password-stdin
+        echo "$PASSWORD" | docker login --username "omersh12" --password-stdin
         docker push omersh12/gradle-hello-world:${{ steps.increment_version.outputs.version }}
         docker run  omersh12/gradle-hello-world:${{ steps.increment_version.outputs.version }}
