@@ -14,7 +14,7 @@ RUN ls -ltrh
 RUN chmod 777 "/app/gradle-hello-world-$VERSION-all.jar"
 
 # Create a non-root user and set permissions
-RUN useradd -m gradle
+RUN useradd --home /app gradle
 RUN chown -R gradle:gradle /app
 USER gradle
 # Run the application
