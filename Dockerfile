@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Copy the jar file into the container
 COPY build/libs/*.jar /app/*
-
+RUN ls -ltrh
 RUN chmod 777 /app/*.jar
 
 # Create a non-root user and set permissions
