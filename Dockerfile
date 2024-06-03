@@ -16,6 +16,10 @@ RUN chmod 777 "/app/gradle-hello-world-$VERSION-all.jar"
 # Create a non-root user and set permissions
 RUN useradd --home /app gradle
 RUN chown -R gradle:gradle /app
+RUN echo "#!/bin/bash" >> docker-entrypoint.sh
+RUN echo "java -jar gradle-hello-world-$VERSION-all.jar" >> docker-entrypoint.sh
+RUN cat docker-entrypoint.sh
+RUN chmod 777 docker-entrypoint.sh
 USER gradle
 # Run the application
-CMD java -jar gradle-hello-world-${VERSION}-all.jar
+CMD ["docker-entrypoint.sh"]
