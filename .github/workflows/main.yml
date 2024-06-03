@@ -23,7 +23,12 @@ jobs:
         uses: docker/setup-buildx-action@v1
         with:
           distribution: 'default'
-
+      - name: Get new version from Gradle
+        id: version
+        run: |
+          VERSION=$(./gradlew updateVersion | grep 'Version: ' | awk '{print $4}')
+          echo "::set-output name=version::${VERSION}"
+      
       - name: Build and push Docker image
         env:
           VERSION: ${{ steps.version.outputs.version }}
@@ -36,8 +41,4 @@ jobs:
           docker push omersh12/hello-world:${VERSION}
           docker push omersh12/hello-world:latest
 
-      - name: Get new version from Gradle
-        id: version
-        run: |
-          VERSION=$(./gradlew updateVersion | grep 'Version: ' | awk '{print $4}')
-          echo "::set-output name=version::${VERSION}"
+      
