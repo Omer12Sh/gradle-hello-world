@@ -31,7 +31,7 @@ jobs:
 
     - name: Increment version
       id: increment_version
-      run: echo "::set-output name=version::$(echo ${{ steps.get_version.outputs.version }} | awk -F '[.]' '{$NF+=1; OFS="."; print $0}')"
+      run: echo "::set-output name=version::$(echo ${{ steps.get_version.outputs.version }} | awk -F '[.]' '{$NF+=1; OFS="."; print $1,$2,$3}')"
 
     - name: Update version in build.gradle
       run: |
