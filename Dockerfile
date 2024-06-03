@@ -22,4 +22,4 @@ RUN cat docker-entrypoint.sh
 RUN chmod 777 docker-entrypoint.sh
 USER gradle
 # Run the application
-CMD ["docker-entrypoint.sh"]
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
