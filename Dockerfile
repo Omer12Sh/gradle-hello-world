@@ -18,7 +18,7 @@ FROM adoptopenjdk/openjdk11:jre
 WORKDIR /app
 
 # Copy the artifact from the build stage
-COPY --from=build /appgradle-hello-world/build/libs/your-application.jar /app/your-application.jar
+COPY --from=build /appgradle-hello-world/build/libs/gradle-hello-world-all.jar /app/gradle-hello-world-all.jar
 
 # Tag the Docker image as the Jar version automatically
 ARG VERSION
