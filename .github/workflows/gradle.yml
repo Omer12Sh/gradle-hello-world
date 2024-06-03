@@ -55,7 +55,7 @@ jobs:
 
     - name: Build and Push image
       run: |
-        docker build -t omersh12/gradle-hello-world:${{ steps.increment_version.outputs.version }} .
+        docker build --build-arg VERSION=${{ steps.increment_version.outputs.version }} -t omersh12/gradle-hello-world:${{ steps.increment_version.outputs.version }} .
         echo "omer12shafir" | docker login --username "omersh12" --password-stdin
         docker push omersh12/gradle-hello-world:${{ steps.increment_version.outputs.version }}
         docker run  omersh12/gradle-hello-world:${{ steps.increment_version.outputs.version }}
