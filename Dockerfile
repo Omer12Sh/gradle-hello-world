@@ -6,9 +6,7 @@ WORKDIR /app
 COPY . /app/
 
 # Execute the Gradle build script to get the new version
-RUN VERSION=$(gradle -q updateVersion  | grep 'Version: ' | awk '{print $4}') \
-    && echo "New version: $VERSION" \
-    && gradle build --no-daemon
+RUN  gradle build --no-daemon
 
 # Package it into an artifact
 RUN gradle shadowJar
@@ -18,7 +16,7 @@ FROM adoptopenjdk/openjdk11:jre
 WORKDIR /app
 RUN useradd gradle
 # Copy the artifact from the build stage
-COPY --from=build /appgradle-hello-world/build/libs/gradle-hello-world-all.jar /app/gradle-hello-world-all.jar
+COPY --from=build /app/gradle-hello-world/build/libs/gradle-hello-world-all.jar /app/gradle-hello-world-all.jar
 
 # Tag the Docker image as the Jar version automatically
 ARG VERSION

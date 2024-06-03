@@ -11,6 +11,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
+version = "1.0.0"
 group = "com.ido"
 description = "HelloWorld"
 
@@ -18,6 +19,14 @@ application.mainClass.set("com.ido.HelloWorld")
 
 repositories {
     mavenCentral()
+}
+
+task incrementVersion<<{
+    String minor=version.substring(version.lastIndexOf('.')+1)
+    int m=minor.toInteger()+1
+    String major=version.substring(0,version.length()-1)
+    String s=buildFile.getText().replaceFirst("version='$version'","version='"+major+m+"'")
+    buildFile.setText(s)
 }
 
 graalvmNative {
@@ -34,35 +43,4 @@ graalvmNative {
             })
         }
     }
-}
-version = "1.0.0" // Initial version
-
-fun getCurrentVersion(): String {
-    return try {
-        val process = Runtime.getRuntime().exec("git describe --tags --abbrev=0")
-        process.inputStream.bufferedReader().use { it.readText().trim() }.replace("[^\\d.]".toRegex(), "")
-    } catch (e: Exception) {
-        version.toString() // Use initial version if no tags are found
-    }
-}
-
-fun incrementPatchVersion(version: String): String {
-    val versionParts = version.split(".").toMutableList()
-    val patchVersion = versionParts.last().toInt() + 1
-    versionParts[versionParts.size - 1] = patchVersion.toString()
-    return versionParts.joinToString(".")
-}
-
-tasks.register("updateVersion") {
-    doLast {
-        val currentVersion = getCurrentVersion()
-        val newVersion = incrementPatchVersion(currentVersion)
-        project.version = newVersion
-
-        println("Updated version to $newVersion")
-    }
-}
-
-tasks.named("build") {
-    dependsOn("updateVersion")
 }
