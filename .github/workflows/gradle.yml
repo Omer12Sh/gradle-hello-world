@@ -41,8 +41,8 @@ jobs:
 
     - name: Commit version change
       run: |
-        git config --global user.email "actions@github.com"
-        git config --global user.name "GitHub Actions"
+        git config --global user.email "omershafir12@gmail.com"
+        git config --global user.name "Omer12Sh"
         git add build.gradle.kts
         git commit -m "Increment version to ${{ steps.increment_version.outputs.version }}"
         git push
