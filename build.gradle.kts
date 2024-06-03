@@ -35,3 +35,34 @@ graalvmNative {
         }
     }
 }
+version = "1.0.0" // Initial version
+
+fun getCurrentVersion(): String {
+    return try {
+        val process = Runtime.getRuntime().exec("git describe --tags --abbrev=0")
+        process.inputStream.bufferedReader().use { it.readText().trim() }.replace("[^\\d.]".toRegex(), "")
+    } catch (e: Exception) {
+        version.toString() // Use initial version if no tags are found
+    }
+}
+
+fun incrementPatchVersion(version: String): String {
+    val versionParts = version.split(".").toMutableList()
+    val patchVersion = versionParts.last().toInt() + 1
+    versionParts[versionParts.size - 1] = patchVersion.toString()
+    return versionParts.joinToString(".")
+}
+
+tasks.register("updateVersion") {
+    doLast {
+        val currentVersion = getCurrentVersion()
+        val newVersion = incrementPatchVersion(currentVersion)
+        project.version = newVersion
+
+        println("Updated version to $newVersion")
+    }
+}
+
+tasks.named("build") {
+    dependsOn("updateVersion")
+}
