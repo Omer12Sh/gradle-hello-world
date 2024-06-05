@@ -28,7 +28,7 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
           DOCKER_USERNAME: omersh12
-          DOCKER_PASSWORD: omer12shafir
+          DOCKER_PASSWORD: 
         run: |
           docker buildx build --platform linux/amd64,linux/arm64 -t omersh12/hello-world:latest .
       
